@@ -79,12 +79,12 @@ void wp_player_upload(wp_stream *stream, float amplitude) {
     // Validate audio information.
 
     if (amplitude < 0.0f) {
-        wp_log_warning("Invalid amplitude: %f - acceptable value range is (0.0 to 1.0)", amplitude);
+        wp_log_warning("Invalid amplitude: %.1f - acceptable value range is (0.0 to 1.0)", amplitude);
         amplitude = 0.0f;
     }
 
     if (amplitude > 1.0f) {
-        wp_log_warning("Invalid amplitude: %f - acceptable value range is (0.0 to 1.0)", amplitude);
+        wp_log_warning("Invalid amplitude: %.1f - acceptable value range is (0.0 to 1.0)", amplitude);
         amplitude = 1.0f;
     }
 
