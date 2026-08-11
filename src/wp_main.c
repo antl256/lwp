@@ -1,5 +1,5 @@
-#include "wp_constants.h"
-#include "wp_logging.h"
+#include "wp_def.h"
+#include "wp_log.h"
 #include "wp_player.h"
 #include "wp_wav.h"
 
@@ -11,11 +11,17 @@
 static wp_wav *s_wav = NULL;
 static wp_stream *s_stream = NULL;
 
-static void cleanup_exit(int signal);
+static void cleanup_exit(int signal) {
+    wp_player_free(s_stream);
+    wp_wav_free(s_wav);
+    printf("\n");
+    wp_log_info("Exiting");
+    exit(0);
+}
 
 int main(int argc, const char **argv) {
     if (argc > 1 && strncmp(argv[1], "--version", sizeof("--version")) == 0) {
-        printf("%s version %d.%d.%d\n", WP_NAME, WP_VERSION_MAJOR, WP_VERSION_MINOR, WP_VERSION_PATCH);
+        printf("%s version %d.%d.%d\n", WP_NAME, WP_MAJOR, WP_MINOR, WP_PATCH);
         return 0;
     }
 
@@ -36,12 +42,4 @@ int main(int argc, const char **argv) {
     wp_wav_free(s_wav);
 
     return 0;
-}
-
-static void cleanup_exit(int signal) {
-    wp_player_free(s_stream);
-    wp_wav_free(s_wav);
-    printf("\n");
-    wp_log_info("Exiting");
-    exit(0);
 }

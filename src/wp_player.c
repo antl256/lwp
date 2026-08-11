@@ -1,10 +1,8 @@
 #include "wp_player.h"
-
-#include "wp_logging.h"
+#include "wp_log.h"
 #include "wp_wav.h"
 
 #include <alsa/asoundlib.h>
-
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,7 +13,18 @@
 #define term_showcursor() printf("\033[?25h")
 #define term_hidecursor() printf("\033[?25l")
 
-static snd_htimestamp_t timestamp(snd_pcm_t *handle);
+static snd_htimestamp_t timestamp(snd_pcm_t *handle) {
+    snd_pcm_uframes_t avail;
+    snd_htimestamp_t timestamp;
+    snd_pcm_htimestamp(handle, &avail, &timestamp);
+    return timestamp;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+/* API */
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 wp_stream *wp_player_create(wp_wav **wav) {
     assert(wav != NULL);
@@ -46,10 +55,10 @@ wp_stream *wp_player_create(wp_wav **wav) {
     stream->total_seconds = stream->total_frames / stream->wav->format.samples_per_second;
 
     wp_log_info("Created PCM stream: (%s) %dhz %d-bit (%ld seconds)",
-             (*wav)->format.channels == 2 ? "stereo" : "mono",
-             (*wav)->format.samples_per_second,
-             (*wav)->format.bits_per_sample,
-             stream->total_seconds);
+                (*wav)->format.channels == 2 ? "stereo" : "mono",
+                (*wav)->format.samples_per_second,
+                (*wav)->format.bits_per_sample,
+                stream->total_seconds);
 
     return stream;
 }
@@ -129,7 +138,7 @@ void wp_player_upload(wp_stream *stream, float amplitude) {
         frames_written_total += frames_written;
 
         wp_log_info_overwrite("Frames sent to soundcard: (%ld/%ld)",
-                           frames_written_total, stream->total_frames);
+                              frames_written_total, stream->total_frames);
     }
 
     term_showcursor();
@@ -152,17 +161,4 @@ void wp_player_drain(wp_stream *stream) {
 
     term_showcursor();
     printf("\n");
-}
-
-//----------------------------------------------------------
-//
-// INTERNAL
-//
-//----------------------------------------------------------
-
-static snd_htimestamp_t timestamp(snd_pcm_t *handle) {
-    snd_pcm_uframes_t avail;
-    snd_htimestamp_t timestamp;
-    snd_pcm_htimestamp(handle, &avail, &timestamp);
-    return timestamp;
 }

@@ -4,7 +4,6 @@
 #include "wp_wav.h"
 
 #include <alsa/asoundlib.h>
-
 #include <stdint.h>
 
 typedef struct wp_stream {
@@ -25,4 +24,4 @@ void wp_player_free(wp_stream *stream);
 void wp_player_upload(wp_stream *stream, float amplitude);
 void wp_player_drain(wp_stream *stream);
 
-#endif
+#endif /* WP_PLAYER_H */
