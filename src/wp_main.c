@@ -1,4 +1,5 @@
 #include "wp_def.h"
+#include "wp_log.h"
 #include "wp_player.h"
 #include "wp_wav.h"
 
@@ -68,10 +69,16 @@ int main(int argc, const char **argv) {
         exit(EXIT_FAILURE);
     }
 
+    float volumef = strtof(volume, NULL);
+    if (volumef == 0.0F) {
+        wp_log_error("Invalid volume: \"%s\"", volume);
+        exit(EXIT_FAILURE);
+    }
+
     s_wav = wp_wav_read(path);
     s_stream = wp_player_create(&s_wav);
 
-    wp_player_upload(s_stream, strtof(volume, NULL));
+    wp_player_upload(s_stream, volumef);
     wp_player_drain(s_stream);
 
     exit(EXIT_SUCCESS);
