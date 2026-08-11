@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 4.0)
 project(wavplayer C)
 
-set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_FLAGS "-Wall -Werror")
 
 add_executable(wavplayer 
