@@ -1,7 +1,7 @@
-#include "wp_def.h"
-#include "wp_log.h"
-#include "wp_player.h"
-#include "wp_wav.h"
+#include "lwpdef.h"
+#include "lwplog.h"
+#include "lwpplayer.h"
+#include "lwpwav.h"
 
 #include <signal.h>
 #include <stdio.h>
@@ -13,8 +13,8 @@
 
 #define checkarg(arg, str) (strncmp(arg, str, sizeof(str)) == 0)
 
-static wp_wav *s_wav = NULL;
-static wp_stream *s_stream = NULL;
+static lwp_wav *s_wav = NULL;
+static lwp_stream *s_stream = NULL;
 
 static void sigint() {
     fprintf(stdout, "\n");
@@ -22,18 +22,18 @@ static void sigint() {
 }
 
 static void cleanup(void) {
-    wp_player_free(s_stream);
-    wp_wav_free(s_wav);
+    lwp_player_free(s_stream);
+    lwp_wav_free(s_wav);
     s_stream = NULL;
     s_wav = NULL;
 }
 
 static void help() {
-    printf("usage: %s WAVFILE VOLUME\n", WP_NAME);
+    printf("usage: %s WAVFILE VOLUME\n", LWP_NAME);
 }
 
 static void version() {
-    printf("%s version %d.%d.%d\n", WP_NAME, WP_MAJOR, WP_MINOR, WP_PATCH);
+    printf("%s version %d.%d.%d\n", LWP_NAME, LWP_MAJOR, LWP_MINOR, LWP_PATCH);
 }
 
 int main(int argc, const char **argv) {
@@ -41,7 +41,7 @@ int main(int argc, const char **argv) {
     atexit(cleanup);
     signal(SIGINT, sigint);
 
-    if (argc < 2) {
+    if (argc < 3) {
         help();
         exit(EXIT_FAILURE);
     }
@@ -71,15 +71,15 @@ int main(int argc, const char **argv) {
 
     float volumef = strtof(volume, NULL);
     if (volumef == 0.0F) {
-        wp_log_error("Invalid volume: \"%s\"", volume);
+        lwp_log_error("Invalid volume: \"%s\"", volume);
         exit(EXIT_FAILURE);
     }
 
-    s_wav = wp_wav_read(path);
-    s_stream = wp_player_create(&s_wav);
+    s_wav = lwp_wav_read(path);
+    s_stream = lwp_player_create(&s_wav);
 
-    wp_player_upload(s_stream, volumef);
-    wp_player_drain(s_stream);
+    lwp_player_upload(s_stream, volumef);
+    lwp_player_drain(s_stream);
 
     exit(EXIT_SUCCESS);
 }

@@ -1,6 +1,5 @@
-#include "wp_player.h"
-#include "wp_log.h"
-#include "wp_wav.h"
+#include "lwpplayer.h"
+#include "lwplog.h"
 
 #include <alsa/asoundlib.h>
 #include <assert.h>
@@ -26,10 +25,10 @@ static snd_htimestamp_t timestamp(snd_pcm_t *handle) {
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-wp_stream *wp_player_create(wp_wav **wav) {
+lwp_stream *lwp_player_create(lwp_wav **wav) {
     assert(wav != NULL);
 
-    wp_stream *stream = calloc(1, sizeof(wp_stream));
+    lwp_stream *stream = calloc(1, sizeof(lwp_stream));
     stream->buffer_cbsize = sizeof(int16_t) * PER_CHANNEL_FRAMES;
     stream->buffer = calloc(1, stream->buffer_cbsize);
     stream->wav = *wav;
@@ -54,16 +53,16 @@ wp_stream *wp_player_create(wp_wav **wav) {
     stream->total_frames = stream->total_uploads * stream->frames_per_write;
     stream->total_seconds = stream->total_frames / stream->wav->format.samples_per_second;
 
-    wp_log_info("Created PCM stream: (%s) %dhz %d-bit (%ld seconds)",
-                (*wav)->format.channels == 2 ? "stereo" : "mono",
-                (*wav)->format.samples_per_second,
-                (*wav)->format.bits_per_sample,
-                stream->total_seconds);
+    lwp_log_info("Created PCM stream: (%s) %dhz %d-bit (%ld seconds)",
+                 (*wav)->format.channels == 2 ? "stereo" : "mono",
+                 (*wav)->format.samples_per_second,
+                 (*wav)->format.bits_per_sample,
+                 stream->total_seconds);
 
     return stream;
 }
 
-void wp_player_free(wp_stream *stream) {
+void lwp_player_free(lwp_stream *stream) {
     term_showcursor();
     if (stream != NULL) {
         snd_pcm_close(stream->pcm);
@@ -72,24 +71,24 @@ void wp_player_free(wp_stream *stream) {
     }
 }
 
-void wp_player_upload(wp_stream *stream, float amplitude) {
+void lwp_player_upload(lwp_stream *stream, float amplitude) {
     assert(stream != NULL);
 
     //----------------------------------------------------------
     // Validate audio information.
 
     if (amplitude < 0.0f) {
-        wp_log_warning("Invalid amplitude: %.1f - acceptable value range is (0.0 to 1.0)", amplitude);
+        lwp_log_warning("Invalid amplitude: %.1f - acceptable value range is (0.0 to 1.0)", amplitude);
         amplitude = 0.0f;
     }
 
     if (amplitude > 1.0f) {
-        wp_log_warning("Invalid amplitude: %.1f - acceptable value range is (0.0 to 1.0)", amplitude);
+        lwp_log_warning("Invalid amplitude: %.1f - acceptable value range is (0.0 to 1.0)", amplitude);
         amplitude = 1.0f;
     }
 
     if (stream->wav->format.channels != 1 && stream->wav->format.channels != 2) {
-        wp_log_error("Invalid number of channels: %d", stream->wav->format.channels);
+        lwp_log_error("Invalid number of channels: %d", stream->wav->format.channels);
         return;
     }
 
@@ -137,15 +136,15 @@ void wp_player_upload(wp_stream *stream, float amplitude) {
         /* Print the frame writing status */
         frames_written_total += frames_written;
 
-        wp_log_info_overwrite("Frames sent to soundcard: (%ld/%ld)",
-                              frames_written_total, stream->total_frames);
+        lwp_log_info_overwrite("Frames sent to soundcard: (%ld/%ld)",
+                               frames_written_total, stream->total_frames);
     }
 
     term_showcursor();
     printf("\n");
 }
 
-void wp_player_drain(wp_stream *stream) {
+void lwp_player_drain(lwp_stream *stream) {
     long elapsed_seconds = 0;
 
     term_hidecursor();
@@ -155,7 +154,7 @@ void wp_player_drain(wp_stream *stream) {
             break;
         }
         stream->timestamp_end = timestamp(stream->pcm);
-        wp_log_info_overwrite("Seconds elapsed: (%ld/%ld)", elapsed_seconds, stream->total_seconds);
+        lwp_log_info_overwrite("Seconds elapsed: (%ld/%ld)", elapsed_seconds, stream->total_seconds);
         elapsed_seconds = stream->timestamp_end.tv_sec - stream->timestamp_start.tv_sec;
     }
 
