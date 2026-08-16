@@ -1,5 +1,5 @@
-#include "lwpplayer.h"
-#include "lwplog.h"
+#include "lwp_player.h"
+#include "lwp_log.h"
 
 #include <alsa/asoundlib.h>
 #include <assert.h>

@@ -1,7 +1,7 @@
-#ifndef LWPLOG_H
-#define LWPLOG_H
+#ifndef LWP_LOG_H
+#define LWP_LOG_H
 
-#include "lwpdef.h"
+#include "lwp_def.h"
 
 #include <stdio.h>
 
@@ -10,4 +10,4 @@
 #define lwp_log_warning(format, ...)        fprintf(stderr, LWP_NAME ": \033[33mwarning:\033[0m " format "\n", ##__VA_ARGS__)
 #define lwp_log_error(format, ...)          fprintf(stderr, LWP_NAME ": \033[31merror:\033[0m " format "\n", ##__VA_ARGS__)
 
-#endif /* LWPLOG_H */
+#endif /* LWP_LOG_H */

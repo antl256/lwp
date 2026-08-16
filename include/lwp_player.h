@@ -1,7 +1,7 @@
-#ifndef LWPPLAYER_H
-#define LWPPLAYER_H
+#ifndef LWP_PLAYER_H
+#define LWP_PLAYER_H
 
-#include "lwpwav.h"
+#include "lwp_wav.h"
 
 #if !defined(_POSIX_C_SOURCE)
 #define _POSIX_C_SOURCE 1
@@ -28,4 +28,4 @@ void lwp_player_free(lwp_stream *stream);
 void lwp_player_upload(lwp_stream *stream, float amplitude);
 void lwp_player_drain(lwp_stream *stream);
 
-#endif /* LWPPLAYER_H */
+#endif /* LWP_PLAYER_H */

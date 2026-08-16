@@ -1,5 +1,5 @@
-#ifndef LWPWAV_H
-#define LWPWAV_H
+#ifndef LWP_WAV_H
+#define LWP_WAV_H
 
 #include <stdint.h>
 
@@ -23,4 +23,4 @@ typedef struct lwp_wav {
 lwp_wav *lwp_wav_read(const char *path);
 void lwp_wav_free(lwp_wav *wav);
 
-#endif /* LWPWAV_H */
+#endif /* LWP_WAV_H */

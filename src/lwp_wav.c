@@ -1,5 +1,5 @@
-#include "lwpwav.h"
-#include "lwplog.h"
+#include "lwp_wav.h"
+#include "lwp_log.h"
 
 #include <assert.h>
 #include <stdbool.h>

@@ -1,7 +1,7 @@
-#include "lwpdef.h"
-#include "lwplog.h"
-#include "lwpplayer.h"
-#include "lwpwav.h"
+#include "lwp_def.h"
+#include "lwp_log.h"
+#include "lwp_player.h"
+#include "lwp_wav.h"
 
 #include <signal.h>
 #include <stdio.h>
