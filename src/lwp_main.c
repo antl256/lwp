@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define FLAG_HELP    "--help"
+#define FLAG_HELP "--help"
 #define FLAG_VERSION "--version"
 
 #define checkarg(arg, str) (strncmp(arg, str, sizeof(str)) == 0)
@@ -29,11 +29,11 @@ static void cleanup(void) {
 }
 
 static void help() {
-    printf("usage: %s WAVFILE VOLUME\n", LWP_NAME);
+    printf("usage: %s WAVFILE VOLUME [--help][--version]\n", LWP_NAME);
 }
 
 static void version() {
-    printf("%s version %d.%d.%d\n", LWP_NAME, LWP_MAJOR, LWP_MINOR, LWP_PATCH);
+    printf("%s v%d.%d.%d\n", LWP_NAME, LWP_MAJOR, LWP_MINOR, LWP_PATCH);
 }
 
 int main(int argc, const char **argv) {
@@ -41,7 +41,7 @@ int main(int argc, const char **argv) {
     atexit(cleanup);
     signal(SIGINT, sigint);
 
-    if (argc < 3) {
+    if (argc < 2) {
         help();
         exit(EXIT_FAILURE);
     }
@@ -61,8 +61,10 @@ int main(int argc, const char **argv) {
     const char *path = NULL;
     const char *volume = NULL;
 
-    if (argv[1][0] != '\0') path = argv[1];
-    if (argv[2][0] != '\0') volume = argv[2];
+    if (argv[1][0] != '\0')
+        path = argv[1];
+    if (argv[2][0] != '\0')
+        volume = argv[2];
 
     if (argc < 3 || path == NULL || volume == NULL) {
         help();
